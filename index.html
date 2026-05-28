@@ -3,90 +3,204 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Saurav's Walkman</title>
+<title>sony walkman (not clickbait)</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:100%;min-height:100vh;overflow-x:hidden;font-family:'Share Tech Mono',monospace}
 #bg-video{position:fixed;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:0}
 .page{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:30px 20px;gap:18px}
+
+/* Title Animation */
+.walkman-title {
+  width: 250px;
+  height: 60px;
+  background-image: url('title1.PNG');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  animation: titleSwap 1s step-end infinite;
+}
+@keyframes titleSwap {
+  0%, 100% { background-image: url('title1.PNG'); }
+  50% { background-image: url('title2.PNG'); }
+}
+
 .device-wrap{position:relative;width:560px;max-width:95vw}
 .device-img{width:100%;display:block;mix-blend-mode:screen}
-/* LCD: positioned over the screen in the walkman image. The screen is roughly left 17%-67% wide, top 28%-70% tall */
 .lcd{position:absolute;top:29%;left:17%;width:49%;height:40%;display:flex;flex-direction:column;justify-content:space-between;padding:4% 5% 6%;pointer-events:none}
 .lcd-top{display:flex;justify-content:space-between;align-items:center}
-.lcd-tracknum{font-size:clamp(6px,1.1vw,9px);color:rgba(160,230,255,0.8);letter-spacing:1px}
-.lcd-dot{width:5px;height:5px;border-radius:50%;background:#4af;opacity:0;transition:opacity 0.3s}
+.lcd-tracknum{font-size:clamp(6px,1.1vw,9px);color:rgba(160,255,230,0.8);letter-spacing:1px}
+.lcd-dot{width:5px;height:5px;border-radius:50%;background:#0c9;opacity:0;transition:opacity 0.3s}
 .lcd-dot.active{opacity:1;animation:blink 1.2s ease-in-out infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
 .lcd-title-wrap{overflow:hidden;white-space:nowrap;flex:1;display:flex;align-items:center;margin:2% 0 1%}
-.lcd-title{display:inline-block;font-size:clamp(9px,1.7vw,14px);color:#7df;text-shadow:0 0 6px rgba(100,200,255,0.9);white-space:nowrap}
+.lcd-title{display:inline-block;font-size:clamp(9px,1.7vw,14px);color:rgb(117, 206, 236);text-shadow:0 0 6px rgba(0,255,200,0.9);white-space:nowrap}
 .lcd-title.scroll{animation:marquee 8s linear infinite}
 @keyframes marquee{0%{transform:translateX(80%)}100%{transform:translateX(-100%)}}
-.lcd-artist{font-size:clamp(6px,1vw,9px);color:rgba(100,180,255,0.65);margin-bottom:3%}
+.lcd-artist{font-size:clamp(6px,1vw,9px);color:rgba(100,255,200,0.65);margin-bottom:3%}
 .lcd-progress{margin-top:auto}
 .lcd-times{display:flex;justify-content:space-between;margin-bottom:4px}
-.lcd-time{font-size:clamp(5px,0.85vw,8px);color:rgba(130,210,255,0.85)}
-.prog-track{width:100%;height:6px;background:rgba(100,180,255,0.12);border-radius:3px;border:1px solid rgba(100,180,255,0.2);cursor:pointer;pointer-events:all;position:relative}
-.prog-fill{height:100%;background:linear-gradient(90deg,#2af,#8ef);border-radius:3px;width:0%;transition:width 0.25s;position:relative}
-.prog-fill::after{content:'';position:absolute;right:-4px;top:50%;transform:translateY(-50%);width:9px;height:9px;border-radius:50%;background:#8ef;box-shadow:0 0 8px rgba(100,220,255,1)}
-/* Play button: on right side of device, roughly right 3%-20% wide, top 15%-60% tall */
-.play-btn-wrap{position:absolute;top:12%;right:4%;width:17%;cursor:pointer;transition:transform 0.1s,filter 0.1s;user-select:none}
-.play-btn-wrap:hover{filter:brightness(1.2) drop-shadow(0 0 8px rgba(200,220,255,0.4))}
+.lcd-time{font-size:clamp(5px,0.85vw,8px);color:rgba(130,255,210,0.85)}
+.prog-track{width:100%;height:6px;background:rgba(100,255,200,0.12);border-radius:3px;border:1px solid rgba(100,255,200,0.2);cursor:pointer;pointer-events:all;position:relative}
+.prog-fill{height:100%;background:linear-gradient(90deg,#097,rgb(0, 187, 255));border-radius:3px;width:0%;transition:width 0.25s;position:relative}
+.prog-fill::after{content:'';position:absolute;right:-4px;top:50%;transform:translateY(-50%);width:9px;height:9px;border-radius:50%;background:rgb(203, 249, 255);box-shadow:0 0 8px rgba(0,255,200,1)}
+
+/* Play & Pause Buttons */
+.stop-btn-wrap{position:absolute;top:45.5%;right:%;width:17%;cursor:pointer;transition:transform 0.1s,filter 0.1s;user-select:none;display:none;}
+.stop-btn-wrap:hover{filter:brightness(1.2) drop-shadow(0 0 8px rgba(200,255,220,0.4))}
+.stop-btn-wrap:active{transform:scale(0.93)}
+.stop-btn-img{width:35%;display:block;mix-blend-mode:screen}
+
+.play-btn-wrap{position:absolute;top:45.5%;right:5%;width:17%;cursor:pointer;transition:transform 0.1s,filter 0.1s;user-select:none}
+.play-btn-wrap:hover{filter:brightness(1.2) drop-shadow(0 0 8px rgba(200,255,220,0.4))}
 .play-btn-wrap:active{transform:scale(0.93)}
-.play-btn-img{width:100%;display:block;mix-blend-mode:screen}
-.pause-overlay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;gap:11%}
-.pause-overlay.visible{display:flex}
-.pause-bar{width:11%;height:30%;background:rgba(20,20,30,0.92);border-radius:2px}
-/* Nav: right side below play btn */
-.nav-controls{position:absolute;top:58%;right:2%;width:18%;display:flex;flex-direction:column;align-items:center;gap:3px}
+.play-btn-img{width:35%;display:block;mix-blend-mode:screen}
+
+/* Nav */
+.nav-controls{position:absolute;top:80%;right:2%;width:18%;display:flex;flex-direction:column;align-items:center;gap:3px}
 .nav-row{display:flex;gap:3px;justify-content:center;width:100%}
-.nav-btn{width:28px;height:20px;background:rgba(180,200,230,0.12);border:1px solid rgba(255,255,255,0.22);border-radius:5px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(255,255,255,0.75);transition:all 0.15s;user-select:none;backdrop-filter:blur(4px)}
-.nav-btn:hover{background:rgba(100,200,255,0.18);color:#7df;border-color:rgba(100,200,255,0.4)}
+.nav-btn{width:28px;height:20px;background:rgba(180,230,220,0.12);border:1px solid rgba(255,255,255,0.22);border-radius:5px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(255,255,255,0.75);transition:all 0.15s;user-select:none;backdrop-filter:blur(4px)}
+.nav-btn:hover{background:rgba(100, 203, 255, 0.18);color:rgb(115, 196, 223);border-color:rgba(100,255,200,0.4)}
 .nav-btn:active{transform:scale(0.88)}
 .arr-l{border-top:4px solid transparent;border-bottom:4px solid transparent;border-right:7px solid currentColor}
 .arr-r{border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:7px solid currentColor}
 .arr-u{border-left:4px solid transparent;border-right:4px solid transparent;border-bottom:7px solid currentColor}
 .arr-d{border-left:4px solid transparent;border-right:4px solid transparent;border-top:7px solid currentColor}
-/* Vol bars bottom left area */
-.vol-wrap{position:absolute;bottom:6%;left:18%;display:flex;align-items:flex-end;gap:2px;height:12px}
-.vol-bar{width:3px;background:rgba(100,200,255,0.15);border-radius:1px;transition:background 0.2s}
-.vol-bar.active{background:rgba(100,200,255,0.8);box-shadow:0 0 3px rgba(100,200,255,0.5)}
-/* Func buttons */
-.func-row{position:absolute;bottom:1%;left:17%;display:flex;gap:6px}
-.func-btn{padding:2px 8px;background:rgba(150,180,220,0.1);border:1px solid rgba(255,255,255,0.18);border-radius:7px;font-family:'Share Tech Mono',monospace;font-size:6px;color:rgba(255,255,255,0.55);cursor:pointer;transition:all 0.15s;backdrop-filter:blur(4px);user-select:none}
-.func-btn:hover{background:rgba(100,200,255,0.14);color:#7df}
-.func-btn.on{color:#7df;border-color:rgba(100,200,255,0.4)}
-/* EQ */
-.eq-panel{width:min(320px,90vw);background:rgba(8,14,38,0.9);border-radius:14px;border:1px solid rgba(100,150,255,0.22);padding:14px 16px;box-shadow:0 8px 32px rgba(0,0,0,0.6);display:none}
+
+/* Grouped Vol & EQ at bottom horizontally */
+.bottom-controls{position:absolute;bottom:6%;left:18%;display:flex;align-items:flex-end;gap:12px;}
+/*.vol-wrap{display:flex;align-items:flex-end;gap:2px;height:12px;padding-bottom:2px;}
+.vol-bar{width:3px;background:rgba(0,200,150,0.15);border-radius:1px;transition:background 0.2s}
+.vol-bar.active{background:rgba(0,200,150,0.8);box-shadow:0 0 3px rgba(0,200,150,0.5)}
+*/
+.vol-wrap {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 20px;
+  padding: 3px;
+  background: rgba(225, 225, 235, 0);
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0);
+  box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0);
+}
+
+.vol-bar {
+  width: 3px;
+  height: 12px;
+  background: #67676960;
+  border-radius: 1px;
+  transition: all 0.2s;
+  filter: drop-shadow(0 1px 1px rgb(0, 0, 0));
+}
+
+.vol-bar.active {
+  background: #84d1eb;
+  box-shadow: 0 0 3px #94c6fdc0;
+}
+
+.func-btn{padding:2px 8px;background:rgba(150,220,200,0.1);border:1px solid rgba(255,255,255,0.18);border-radius:7px;font-family:'Share Tech Mono',monospace;font-size:8px;color:rgba(255,255,255,0.55);cursor:pointer;transition:all 0.15s;backdrop-filter:blur(4px);user-select:none}
+.func-btn:hover{background:rgba(0,255,200,0.14);color:rgb(0, 255, 255)}
+.func-btn.on{color:#0ff;border-color:rgba(0,255,200,0.4)}
+
+/* Hardware Shuffle & Repeat Buttons Using Slider Image */
+.hardware-btn {
+  position: absolute;
+  width: 60px; 
+  height: 30px;
+  background-image: url('slider.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+  transition: filter 0.2s;
+  user-select: none;
+}
+.hardware-btn.on { filter: hue-rotate(-40deg) brightness(1.5); }
+
+/* --- FINE TUNE SHUFFLE AND REPEAT LOCATIONS HERE --- */
+#btn-shuffle {
+  top: 35%; 
+  left: 63%; 
+}
+#btn-repeat {
+  top: 48%; 
+  left: 61%; 
+}
+
+/* Add labels to hardware buttons matching the music font */
+#btn-shuffle::after {
+  content: '⬮SHUFFLE';
+  position: absolute;
+  top: -60%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 6px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: rgb(255, 255, 255);
+  text-shadow: 0 0 6px rgba(89, 109, 111, 0.9);
+}
+
+#btn-repeat::after {
+  content: '⬮REPEAT';
+  position: absolute;
+  top: -60%;
+  left: 40%;
+  transform: translateX(-50%);
+  margin-top: 6px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: rgb(255, 255, 255);
+  text-shadow: 0 0 6px rgba(89, 109, 111, 0.9);
+}
+/* --------------------------------------------------- */
+
+/* Blue Glass Panels */
+.eq-panel{width:min(440px,90vw);background:rgba(15,25,45,0.45);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:14px;border:1px solid rgba(80,160,255,0.25);border-top:1px solid rgba(255,255,255,0.25);padding:14px 16px;box-shadow:0 8px 32px rgba(0,0,0,0.6),inset 0 0 10px rgba(255,255,255,0.05);display:none}
 .eq-panel.visible{display:block}
-.eq-title{font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:3px;color:rgba(100,180,255,0.6);margin-bottom:12px;text-align:center}
+.eq-title{font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:3px;color:rgba(120,200,255,0.7);margin-bottom:12px;text-align:center}
 .eq-band{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.eq-label{font-size:8px;color:rgba(100,180,255,0.5);width:28px;text-align:right;flex-shrink:0}
-.eq-slider{flex:1;-webkit-appearance:none;height:4px;border-radius:2px;background:rgba(100,180,255,0.2);outline:none;cursor:pointer}
-.eq-slider::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#c8d8f0,#6888b8);border:1px solid rgba(255,255,255,0.5);cursor:pointer;box-shadow:0 0 6px rgba(100,200,255,0.4)}
-.eq-value{font-size:8px;color:rgba(100,200,255,0.7);width:28px;flex-shrink:0}
-.eq-viz{display:flex;align-items:flex-end;justify-content:center;gap:3px;height:32px;margin-top:10px;padding-top:6px;border-top:1px solid rgba(100,150,255,0.1)}
+.eq-label{font-size:8px;color:rgba(100,180,255,0.6);width:28px;text-align:right;flex-shrink:0}
+
+/* EQ Slider with Custom Image */
+.eq-slider{flex:1;-webkit-appearance:none;height:4px;border-radius:2px;background:rgba(80,160,255,0.25);outline:none;cursor:pointer}
+.eq-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:30px;
+  height:30px;
+  background:url('slider.png') center/contain no-repeat;
+  border:none;
+  box-shadow:none;
+  border-radius:0;
+  cursor:pointer;
+  transition:transform 0.1s;
+}
+.eq-slider::-webkit-slider-thumb:active{transform:scale(1.1)}
+.eq-value{font-size:8px;color:rgba(150,220,255,0.8);width:28px;flex-shrink:0}
+.eq-viz{display:flex;align-items:flex-end;justify-content:center;gap:3px;height:32px;margin-top:10px;padding-top:6px;border-top:1px solid rgba(80,160,255,0.15)}
 .eq-viz-bar{width:8px;border-radius:2px 2px 0 0;transition:height 0.15s,background 0.15s}
+
 /* Playlist */
-.playlist-panel{width:min(440px,90vw);background:rgba(8,14,38,0.82);border-radius:16px;border:1px solid rgba(100,150,255,0.18);padding:14px;box-shadow:0 8px 32px rgba(0,0,0,0.5)}
-.pl-header{font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:3px;color:rgba(100,180,255,0.6);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid rgba(100,150,255,0.14);display:flex;align-items:center;justify-content:space-between}
-.upload-lbl{font-family:'Share Tech Mono',monospace;font-size:8px;color:rgba(100,200,255,0.7);background:rgba(100,180,255,0.1);border:1px solid rgba(100,180,255,0.25);border-radius:6px;padding:3px 10px;cursor:pointer;transition:all 0.15s}
-.upload-lbl:hover{background:rgba(100,180,255,0.2);color:#7df}
+.playlist-panel{width:min(440px,90vw);background:rgba(15,25,45,0.45);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:16px;border:1px solid rgba(80,160,255,0.25);border-top:1px solid rgba(255,255,255,0.25);padding:14px;box-shadow:0 8px 32px rgba(0,0,0,0.5),inset 0 0 10px rgba(255,255,255,0.05)}
+.pl-header{font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:3px;color:rgba(120,200,255,0.7);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid rgba(80,160,255,0.2);display:flex;align-items:center;justify-content:space-between}
+.upload-lbl{font-family:'Share Tech Mono',monospace;font-size:8px;color:rgba(150,220,255,0.8);background:rgba(80,160,255,0.15);border:1px solid rgba(80,160,255,0.3);border-radius:6px;padding:3px 10px;cursor:pointer;transition:all 0.15s}
+.upload-lbl:hover{background:rgba(80,160,255,0.25);color:#4af}
 .pl-item{display:flex;align-items:center;gap:10px;padding:7px 8px;border-radius:8px;cursor:pointer;transition:background 0.15s;margin-bottom:2px}
-.pl-item:hover{background:rgba(100,180,255,0.08)}
-.pl-item.active{background:rgba(100,180,255,0.13)}
-.pl-num{font-size:8px;color:rgba(100,180,255,0.4);min-width:16px;text-align:right}
+.pl-item:hover{background:rgba(80,160,255,0.1)}
+.pl-item.active{background:rgba(80,160,255,0.2)}
+.pl-num{font-size:8px;color:rgba(100,180,255,0.5);min-width:16px;text-align:right}
 .pl-info{flex:1;overflow:hidden}
-.pl-name{font-size:10px;color:rgba(200,220,255,0.9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pl-artist{font-size:8px;color:rgba(100,150,255,0.5)}
-.pl-dur{font-size:8px;color:rgba(100,180,255,0.4)}
+.pl-name{font-size:10px;color:rgba(220,240,255,0.9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl-artist{font-size:8px;color:rgba(100,180,255,0.6)}
+.pl-dur{font-size:8px;color:rgba(100,180,255,0.5)}
 .eq-bars{display:flex;gap:2px;align-items:flex-end;height:12px;opacity:0;transition:opacity 0.2s}
 .eq-bars.on{opacity:1}
-.eqb{width:2px;background:#4af;border-radius:1px;animation:eqanim 0.8s ease-in-out infinite}
+.eqb{width:2px;background:#39f;border-radius:1px;animation:eqanim 0.8s ease-in-out infinite}
 .eqb:nth-child(1){height:4px;animation-delay:0s}.eqb:nth-child(2){height:10px;animation-delay:0.2s}.eqb:nth-child(3){height:6px;animation-delay:0.4s}
 @keyframes eqanim{0%,100%{transform:scaleY(1)}50%{transform:scaleY(0.3)}}
-.empty-hint{font-size:9px;color:rgba(100,180,255,0.3);text-align:center;padding:10px}
+.empty-hint{font-size:9px;color:rgba(100,180,255,0.4);text-align:center;padding:10px}
 #file-input{display:none}
 </style>
 </head>
@@ -95,8 +209,9 @@ html,body{width:100%;min-height:100vh;overflow-x:hidden;font-family:'Share Tech 
   <source src="gradient-3840x2160.mp4" type="video/mp4">
 </video>
 <div class="page">
+  <div class="walkman-title"></div>
   <div class="device-wrap">
-    <img class="device-img" src="body.png" alt="Sony Walkman">
+    <img class="device-img" src="base.PNG" alt="Sony Walkman">
     <div class="lcd">
       <div class="lcd-top">
         <span class="lcd-tracknum" id="track-num">01/01</span>
@@ -112,10 +227,14 @@ html,body{width:100%;min-height:100vh;overflow-x:hidden;font-family:'Share Tech 
         <div class="prog-track" id="progress-track"><div class="prog-fill" id="progress-fill"></div></div>
       </div>
     </div>
-    <div class="play-btn-wrap" id="btn-play">
-      <img class="play-btn-img" src="playbutton.png" alt="Play">
-      <div class="pause-overlay" id="pause-overlay"><div class="pause-bar"></div><div class="pause-bar"></div></div>
+    
+    <div class="stop-btn-wrap" id="btn-pause" title="Pause">
+      <img class="stop-btn-img" src="stop.png" alt="Pause">
     </div>
+    <div class="play-btn-wrap" id="btn-play" title="Play">
+      <img class="play-btn-img" src="playbutton.png" alt="Play">
+    </div>
+
     <div class="nav-controls">
       <div class="nav-row"><div class="nav-btn" id="btn-vol-up"><span class="arr-u"></span></div></div>
       <div class="nav-row">
@@ -124,12 +243,15 @@ html,body{width:100%;min-height:100vh;overflow-x:hidden;font-family:'Share Tech 
       </div>
       <div class="nav-row"><div class="nav-btn" id="btn-vol-down"><span class="arr-d"></span></div></div>
     </div>
-    <div class="vol-wrap" id="vol-display"></div>
-    <div class="func-row">
-      <div class="func-btn" id="btn-shuffle">SHUF</div>
-      <div class="func-btn" id="btn-repeat">REPT</div>
+    
+    <div class="bottom-controls">
+      <div class="vol-wrap" id="vol-display"></div>
       <div class="func-btn" id="btn-eq">EQ</div>
     </div>
+
+    <div class="hardware-btn" id="btn-shuffle" title="Shuffle"></div>
+    <div class="hardware-btn" id="btn-repeat" title="Repeat"></div>
+
   </div>
   <div class="eq-panel" id="eq-panel">
     <div class="eq-title">EQUALIZER</div>
@@ -167,9 +289,19 @@ function setupCtx(){
 }
 let playlist=[{name:'Scenic World',artist:'Beirut',url:null,duration:0,isSample:true}];
 let cur=0,playing=false,vol=7,shuffle=false,repeatMode=0;
-function buildVol(){
+/*function buildVol(){
   const d=document.getElementById('vol-display');d.innerHTML='';
   [3,5,7,9,11,13,11,9,7,5,3].forEach((h,i)=>{const b=document.createElement('div');b.className='vol-bar'+(i<vol?' active':'');b.style.height=h+'px';d.appendChild(b);});
+}*/
+function buildVol() {
+  const d = document.getElementById('vol-display');
+  d.innerHTML = '';
+  // Creates 11 uniform segments
+  for (let i = 0; i < 11; i++) {
+    const b = document.createElement('div');
+    b.className = 'vol-bar' + (i < vol ? ' active' : '');
+    d.appendChild(b);
+  }
 }
 function updateVol(){document.querySelectorAll('.vol-bar').forEach((b,i)=>b.classList.toggle('active',i<vol));}
 function fmt(s){if(!isFinite(s))return'0:00';return Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');}
@@ -210,27 +342,34 @@ function play(){
   aud.play().catch(()=>{});setPS(true);
 }
 function pause(){aud.pause();setPS(false);}
+
 function setPS(p){
   playing=p;
   document.getElementById('play-dot').classList.toggle('active',p);
-  document.getElementById('pause-overlay').classList.toggle('visible',p);
   updateInd();
+  
+  // Toggle Play and Pause buttons
+  document.getElementById('btn-play').style.display = p ? 'none' : 'block';
+  document.getElementById('btn-pause').style.display = p ? 'block' : 'none';
 }
 function nextTrack(){if(!playlist.length)return;cur=shuffle?Math.floor(Math.random()*playlist.length):(cur+1)%playlist.length;loadTrack();if(playing)play();}
 function prevTrack(){if(!playlist.length)return;if(aud.currentTime>3){aud.currentTime=0;return;}cur=(cur-1+playlist.length)%playlist.length;loadTrack();if(playing)play();}
-document.getElementById('btn-play').addEventListener('click',()=>{playing?pause():play();});
+
+document.getElementById('btn-play').addEventListener('click', play);
+document.getElementById('btn-pause').addEventListener('click', pause);
+
 document.getElementById('btn-next').addEventListener('click',nextTrack);
 document.getElementById('btn-prev').addEventListener('click',prevTrack);
 document.getElementById('btn-vol-up').addEventListener('click',()=>{vol=Math.min(11,vol+1);if(gainN)gainN.gain.value=vol/11;else aud.volume=vol/11;updateVol();});
 document.getElementById('btn-vol-down').addEventListener('click',()=>{vol=Math.max(0,vol-1);if(gainN)gainN.gain.value=vol/11;else aud.volume=vol/11;updateVol();});
 document.getElementById('btn-shuffle').addEventListener('click',function(){shuffle=!shuffle;this.classList.toggle('on',shuffle);});
-document.getElementById('btn-repeat').addEventListener('click',function(){repeatMode=(repeatMode+1)%3;this.textContent=['REPT','RPT1','RPTA'][repeatMode];this.classList.toggle('on',repeatMode>0);aud.loop=repeatMode===1;});
+document.getElementById('btn-repeat').addEventListener('click',function(){repeatMode=(repeatMode+1)%3;this.style.filter=repeatMode>0?'hue-rotate(-40deg) brightness(1.5)':'';aud.loop=repeatMode===1;});
 let eqOpen=false;
 document.getElementById('btn-eq').addEventListener('click',function(){eqOpen=!eqOpen;this.classList.toggle('on',eqOpen);document.getElementById('eq-panel').classList.toggle('visible',eqOpen);});
 function buildEqViz(){
   const v=document.getElementById('eq-viz');v.innerHTML='';
   const b=parseInt(document.getElementById('bass-slider').value),m=parseInt(document.getElementById('mid-slider').value),tr=parseInt(document.getElementById('treble-slider').value);
-  [b,b,m,m,m,m,tr,tr].forEach(val=>{const bar=document.createElement('div');bar.className='eq-viz-bar';bar.style.height=Math.max(4,16+val*0.8)+'px';bar.style.background='hsl('+(val>0?195:val<0?260:195)+','+(val===0?30:70)+'%,60%)';v.appendChild(bar);});
+  [b,b,m,m,m,m,tr,tr].forEach(val=>{const bar=document.createElement('div');bar.className='eq-viz-bar';bar.style.height=Math.max(4,16+val*0.8)+'px';bar.style.background='hsl('+(val>0?160:val<0?190:160)+','+(val===0?25:45)+'%,45%)';v.appendChild(bar);});
 }
 aud.addEventListener('timeupdate',()=>{if(!aud.duration)return;document.getElementById('progress-fill').style.width=(aud.currentTime/aud.duration*100)+'%';document.getElementById('time-current').textContent=fmt(aud.currentTime);});
 aud.addEventListener('loadedmetadata',()=>{document.getElementById('time-total').textContent=fmt(aud.duration);if(playlist[cur])playlist[cur].duration=aud.duration;renderPL();});
